@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="main.css">
+  <title>Un Tesoro Especial</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+</head>
+
+<body>
+  <div class="estrellas" id="estrellas"></div>
+
+  <div id="pantallaInicio">✨ Para mi princess ✨</div>
+
+  <audio id="musica" src="/cancion.mp3"></audio>
+  <div id="destello"></div>
+
+  <div id="contenido">
+    <h1>Te amo sofi :(</h1>
+    <p> Eres mi tesorito mas valioso, mi princesa, mi amor, mi vida, mi todo.
+      ¿Me concederías el honor de una cita?</p>
+
+    <div id="cofre">
+      <img src="/image.png" alt="Cofre cerrado" id="cofreImagen">
+    </div>
+  </div>
+
+  <img src="/image2.png" id="llave">
+
+  <div id="carrusel">
+    <img src="/img1.jpg" class="carrusel-img" style="opacity:1">
+    <img src="/img2.jpg" class="carrusel-img">
+    <img src="/img3.jpg" class="carrusel-img">
+    <img src="/img4.jpg" class="carrusel-img">
+    <img src="/img5.jpg" class="carrusel-img">
+    <img src="/img6.jpg" class="carrusel-img">
+    <img src="/img7.jpg" class="carrusel-img">
+    <img src="/img8.jpg" class="carrusel-img">
+    <img src="/img9.jpg" class="carrusel-img">
+    <img src="/img10.jpg" class="carrusel-img">
+  </div>
+  <img src="pollo.png" alt="Pollo" id="pollo">
+  <div id="mensajeFinal">
+    <div class="corazon-decoracion"></div>
+    <div class="corazon-decoracion corazon2"></div>
+    <h2>Nuestra Cita Especial</h2>
+    <p>Ya te lo dije , no quiero perder a la niña que amo por nada en el mundo :(</p>
+    <div id="fecha_cita">
+      <div class="fecha-cita">
+        <div class="icono-cita calendario"></div>
+        <span>Sábado, 06 de Marzo</span>
+      </div>
+
+      <div class="fecha-cita">
+        <div class="icono-cita reloj"></div>
+        <span>11:00 Am</span>
+      </div>
+
+      <div class="fecha-cita">
+        <div class="icono-cita ubicacion"></div>
+        <span>En tu casita ( y sorpresa despues)</span>
+      </div>
+    </div>
+
+
+
+    <p class="mensaje-final">¡Di que sí, mi sirena del mar! ❤️</p>
+
+    <div class="botones-respuesta">
+      <button id="botonSi" class="boton boton-si">¡Sí, acepto!</button>
+      <button id="botonNo" class="boton boton-no">Déjame pensarlo</button>
+    </div>
+
+    <div class="confetti-container" id="confetti"></div>
+  </div>
+
+  <script>
+    const pantallaInicio = document.getElementById('pantallaInicio');
+    const contenido = document.getElementById('contenido');
+    const cofreImagen = document.getElementById('cofreImagen');
+    const llave = document.getElementById('llave');
+    const destello = document.getElementById('destello');
+    const musica = document.getElementById('musica');
+    const carrusel = document.getElementById('carrusel');
+    const imagenes = document.querySelectorAll('.carrusel-img');
+    const mensajeFinal = document.getElementById('mensajeFinal');
+    const fecha_cita = document.getElementById('fecha_cita');
+    const pollo = document.getElementById('pollo');
+    const estrellas = document.getElementById('estrellas');
+    let cofreAbierto = false;
+
+    // Crear estrellas
+    for (let i = 0; i < 100; i++) {
+      const estrella = document.createElement('div');
+      estrella.classList.add('estrella');
+      estrella.style.top = `${Math.random() * 100}%`;
+      estrella.style.left = `${Math.random() * 100}%`;
+      estrella.style.width = `${Math.random() * 3 + 1}px`;
+      estrella.style.height = estrella.style.width;
+      estrella.style.animationDelay = `${Math.random() * 2}s`;
+      estrellas.appendChild(estrella);
+    }
+
+    // Función para crear partículas brillantes
+    function crearParticulas(id = 'cofre') {
+      const cofre = document.getElementById(id);
+      const cofreRect = cofre.getBoundingClientRect();
+
+      for (let i = 0; i < 20; i++) {
+        const particula = document.createElement('div');
+        particula.classList.add('particula');
+
+        // Tamaño aleatorio
+        const tamaño = Math.random() * 8 + 2;
+        particula.style.width = `${tamaño}px`;
+        particula.style.height = `${tamaño}px`;
+
+        // Posición inicial aleatoria alrededor del cofre
+        const x = cofreRect.left + cofreRect.width / 2 + (Math.random() * 140 - 70);
+        const y = cofreRect.top + cofreRect.height / 2 + (Math.random() * 100 - 50);
+
+        particula.style.left = `${x}px`;
+        particula.style.top = `${y}px`;
+
+        document.body.appendChild(particula);
+
+        // Animación con GSAP
+        gsap.fromTo(particula,
+          { opacity: 0, scale: 0 },
+          {
+            opacity: 0.6,
+            scale: 1,
+            duration: 0.3,
+            delay: Math.random() * 1.3,
+            ease: "power2.out",
+            onComplete: () => {
+              // Animación de movimiento y desaparición
+              gsap.to(particula, {
+                x: (Math.random() - 0.5) * 200,
+                y: (Math.random() - 0.5) * 200 - 50,
+                opacity: 0,
+                duration: 1 + Math.random() * 1.3,
+                ease: "power1.out",
+                onComplete: () => {
+                  particula.remove();
+                }
+              });
+            }
+          }
+        );
+      }
+    }
+
+    // Pantalla de inicio
+    pantallaInicio.addEventListener('click', () => {
+      // Ocultar pantalla de inicio
+      gsap.to(pantallaInicio, {
+        opacity: 0,
+        duration: 1.2,
+        onComplete: () => pantallaInicio.style.display = 'none'
+      });
+
+      // Mostrar contenido
+      contenido.style.display = 'block';
+      gsap.fromTo(contenido,
+        { opacity: 0, y: 50, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 1, ease: "back.out(1.7)" }
+      );
+
+      // Animar cofre
+      gsap.fromTo(cofreImagen,
+        { y: 20, scale: 0.9, rotation: -5 },
+        { y: 0, scale: 1, rotation: 0, duration: 1.2, delay: 0.5, ease: "elastic.out(1, 0.3)" }
+      );
+
+      // Iniciar música con volumen bajo e incrementar
+      musica.volume = 0;
+      musica.play();
+      gsap.to(musica, { volume: 0.15, duration: 3 });
+
+
+      // Configurar la llave inicialmente (fuera de la pantalla a la derecha)
+      gsap.set(llave, { x: 100, y: 0, rotation: 0, scale: 0.8 });
+
+      // Animar la llave para que entre en escena después de un retraso
+      setTimeout(() => {
+        // Animación mejorada de la llave
+        const timeline = gsap.timeline();
+
+        // Entrada de la llave
+        timeline.to(llave, {
+          x: -150,
+          rotation: 10,
+          scale: 1,
+          duration: 1.5,
+          ease: "power3.out"
+        });
+
+        // Movimiento hacia el cofre
+        timeline.to(llave, {
+          x: -250,
+          y: 0,
+          rotation: -10,
+          duration: 0.8,
+          ease: "power2.inOut",
+        });
+
+        // Movimiento final de inserción en el cofre
+        timeline.to(llave, {
+          x: -320,
+          y: 0,
+          rotation: 0,
+          duration: 0.5,
+          ease: "power1.in",
+          onComplete: () => {
+            // Pequeña pausa antes de abrir el cofre
+            setTimeout(abrirCofre, 300);
+          }
+        });
+      }, 1500);
+    });
+
+    function abrirCofre() {
+      if (!cofreAbierto) {
+
+        // Hacer desaparecer la llave
+        gsap.to(llave, {
+          opacity: 0,
+          scale: 0.8,
+          duration: 0.5
+        });
+
+        // Crear partículas brillantes
+        crearParticulas();
+
+        // Efecto de destello en pantalla completa (más pronunciado)
+        gsap.to(destello, {
+          opacity: 0,
+          duration: 0.1,
+          onComplete: () => {
+            gsap.fromTo(destello,
+              { opacity: 0, scale: 0.8 },
+              {
+                opacity: 1,
+                scale: 1.2,
+                duration: 0.7,
+                ease: "power3.out",
+                onComplete: () => {
+                  // Transición directa al carrusel
+                  gsap.to(contenido, {
+                    opacity: 0,
+                    scale: 0.8,
+                    duration: 0.5,
+                    ease: "power2.in",
+                    onComplete: () => {
+                      contenido.style.display = 'none';
+                      iniciarCarrusel();
+
+                      // Desvanecer el destello después
+                      gsap.to(destello, {
+                        opacity: 0,
+                        scale: 1.5,
+                        duration: 1,
+                        ease: "power2.out"
+                      });
+                    }
+                  });
+                }
+              }
+            );
+          }
+        });
+
+        cofreAbierto = true;
+      }
+    }
+
+    function iniciarCarrusel() {
+      // Mostrar carrusel
+      carrusel.style.display = 'block';
+      gsap.fromTo(carrusel,
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }
+      );
+
+      // Iniciar secuencia de imágenes
+      mostrarImagenes();
+    }
+
+    function mostrarImagenes() {
+      let indice = 0;
+
+      // Mostrar primera imagen
+      imagenes[0].style.opacity = 1;
+
+      // Cambiar imágenes cada 4 segundos
+      const intervalo = setInterval(() => {
+        // Ocultar imagen actual
+        crearParticulas("carrusel");
+        gsap.to(imagenes[indice], { opacity: 0, duration: 1.5 });
+        
+
+        // Mostrar siguiente imagen
+        indice = (indice + 1) % imagenes.length;
+        gsap.to(imagenes[indice], { opacity: 1, duration: 1.5 });
+
+        // Si es la última imagen, mostrar mensaje final
+        if (indice === imagenes.length - 1) {
+          clearInterval(intervalo);
+          setTimeout(mostrarMensajeFinal, 3000);
+        }
+      }, 3000);
+    }
+
+    function mostrarMensajeFinal() {
+      // Ocultar carrusel
+      gsap.to(carrusel, {
+        opacity: 0,
+        scale: 0.9,
+        duration: 1,
+        ease: "power2.inOut",
+        onComplete: () => {
+          carrusel.style.display = 'none';
+          pollo.style.display = 'block';
+
+          // Mostrar mensaje final
+          mensajeFinal.style.display = 'block';
+          fecha_cita.style.display = 'block';
+          gsap.fromTo(mensajeFinal,
+            { opacity: 0, scale: 0.8, y: 30 },
+            { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: "back.out(1.7)" }
+          );
+          gsap.fromTo(fecha_cita,
+            { opacity: 0, scale: 0.8, y: 30 },
+            { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: "back.out(1.7)" }
+          );
+          gsap.fromTo(pollo,
+            { opacity: 0, scale: 0.8, y: 30 },
+            { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: "back.out(1.7)" }
+          );
+        }
+      });
+
+      // Desvanecer la música suavemente
+      setTimeout(() => {
+        gsap.to(musica, {
+          volume: 0,
+          duration: 7,
+          ease: "power1.out",
+          onComplete: () => {
+            musica.pause();
+          }
+        });
+      }, 17000);
+
+
+
+      // Animar destello
+      gsap.to(destello, { opacity: 0.6, duration: 0.8, ease: "power2.out" });
+      gsap.to(destello, { opacity: 0, duration: 1.5, delay: 0.8 });
+    }
+  </script>
+</body>
+
+</html>
